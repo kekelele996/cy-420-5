@@ -17,11 +17,19 @@ export function useGameLoop() {
   let timer = 0;
   onMounted(() => {
     timer = window.setInterval(() => {
-      if (store.state) store.state.tick++;
+      if (store.state) {
+        store.state.tick++;
+        store.tickBoost();
+      }
     }, 120);
     window.advanceTime = (ms: number) => {
       const steps = Math.max(1, Math.round(ms / 120));
-      for (let i = 0; i < steps; i++) if (store.state) store.state.tick++;
+      for (let i = 0; i < steps; i++) {
+        if (store.state) {
+          store.state.tick++;
+          store.tickBoost();
+        }
+      }
     };
   });
   onUnmounted(() => clearInterval(timer));
